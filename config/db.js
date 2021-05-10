@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 //Check DB name!
-const dbURI = ``;
+const dbURI = `mongodb+srv://bzs:3YVVYOWCCCH6YgEX@attendancetracker.ha9nd.mongodb.net/contact-list?retryWrites=true&w=majority`;
 
 //No needing to check something
 const connectDB = async () => {

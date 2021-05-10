@@ -11,12 +11,12 @@ exports.newContact = async (req, res) => {
 
     const newContact = new contacts(req.body);
 
-    await newContact.save(err => {
+    await newContact.save((err, docs) => {
         console.log(err);
         if(err) {
             res.send(err.errors);
         } else {
-            res.send(`${req.body.fullName} is registered on your contact list`);
+            res.send(docs);
         }
     });
 
