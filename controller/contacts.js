@@ -40,3 +40,22 @@ exports.getAll = (req,res) => {
         }
     });
 }
+
+exports.deleteContact = (req,res) => {
+    const id = req.params.contactId;
+    //contacts.findByIdAndDelete(req.params.id, (err,docs) => {
+    contacts.findByIdAndDelete(id, (err,doc) => {
+        if(err) {
+            res.send({status:'failed', message: err});
+        } else {
+            console.log(doc);
+            res.send({
+                status:'success', 
+                message: `${doc.fullName} is deleted from your contact list.`,
+                data: doc._id
+            });
+        }
+    })
+
+    //res.send({status:'test', message: req.params.id});
+}
