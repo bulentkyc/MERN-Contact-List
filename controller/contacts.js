@@ -67,8 +67,8 @@ exports.deleteContact = (req,res) => {
 
 exports.updateContact = (req,res) => {
     console.log(req.body);
-    const contact = req.body
-    contacts.findByIdAndUpdate(contact._id,contact, (err,doc)=>{
+    const contact = {...req.body}
+    contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, new: true, runValidators: true}, (err,doc)=>{
         if (err) {
             console.log(err);
             res.send({status:'failed', message: err});
