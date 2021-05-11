@@ -43,10 +43,15 @@ exports.getAll = (req,res) => {
 
 exports.deleteContact = (req,res) => {
     const id = req.params.contactId;
-    //contacts.findByIdAndDelete(req.params.id, (err,docs) => {
+    //contacts.deleteOne(req.params.id, (err,docs) => {
+
+    
     contacts.findByIdAndDelete(id, (err,doc) => {
         if(err) {
+            console.log(err);
             res.send({status:'failed', message: err});
+        } else if (doc === null) {
+            res.send({status:'failed', message: 'There was no contact'});
         } else {
             console.log(doc);
             res.send({
@@ -56,6 +61,11 @@ exports.deleteContact = (req,res) => {
             });
         }
     })
-
+    
     //res.send({status:'test', message: req.params.id});
+}
+
+exports.updateContact = (req,res) => {
+    console.log(req.body);
+    res.send(({status:'success', message: 'Contact updated successfully'}));
 }
