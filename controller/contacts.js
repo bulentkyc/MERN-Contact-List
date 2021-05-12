@@ -65,10 +65,33 @@ exports.deleteContact = (req,res) => {
     //res.send({status:'test', message: req.params.id});
 }
 
-exports.updateContact = (req,res) => {
+exports.updateContact = async (req,res) => {
     console.log(req.body);
     const contact = {...req.body}
-    contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, new: true, runValidators: true}, (err,doc)=>{
+   /*  contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, new: true, runValidators: true}, (err,doc)=>{
+        if (err) {
+            console.log(err);
+            res.send({status:'failed', message: err});
+        } else {
+            console.log(doc);
+            res.send(({status:'success', message: 'Contact updated successfully'}));
+        }
+    }); */
+
+
+
+    const updatedContact = await contacts.findById(contact._id);
+    
+    //new contacts(contact);
+
+    Object.keys(contact).forEach(key => updatedContact[key] = contact[key]);
+
+    /* updatedContact.fullName = contact.fullName;
+    updatedContact.email = contact.email;
+    updatedContact.phone = contact.phone;
+    updatedContact.address = contact.address;
+ */
+    updatedContact.save((err,doc)=>{
         if (err) {
             console.log(err);
             res.send({status:'failed', message: err});
