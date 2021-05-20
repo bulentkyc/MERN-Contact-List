@@ -1,7 +1,9 @@
 const contacts = require('../model/contacts');
+const logs = require('../model/logs');
 
 exports.newContact = async (req, res) => {
-    console.log(req.body);
+    console.log('controller', req.body);
+    console.log(req.logId);
     /* 
         const {fullName, email, phone, address} = req.body;
         const newContact = new contacts({
@@ -16,7 +18,10 @@ exports.newContact = async (req, res) => {
         if(err) {
             res.send(err.errors);
         } else {
+            console.log(docs)
             res.send(docs);
+            //const updatedLog = new logs({postData: docs});
+            logs.findByIdAndUpdate(req.logId, {postData: JSON.stringify(docs)}, (err,doc) => console.log({err,doc}));
         }
     });
 
