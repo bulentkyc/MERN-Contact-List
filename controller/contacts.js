@@ -48,9 +48,7 @@ exports.getAll = (req,res) => {
 
 exports.deleteContact = (req,res) => {
     const id = req.params.contactId;
-    //contacts.deleteOne(req.params.id, (err,docs) => {
-
-    
+    //contacts.deleteOne(req.params.id, (err,docs) => {    
     contacts.findByIdAndDelete(id, (err,doc) => {
         if(err) {
             console.log(err);
@@ -59,6 +57,7 @@ exports.deleteContact = (req,res) => {
             res.send({status:'failed', message: 'There was no contact'});
         } else {
             console.log(doc);
+            logs.findByIdAndUpdate(req.logId, {preData: JSON.stringify(doc)}, (err,doc) => {});
             res.send({
                 status:'success', 
                 message: `${doc.fullName} is deleted from your contact list.`,
@@ -73,29 +72,29 @@ exports.deleteContact = (req,res) => {
 exports.updateContact = async (req,res) => {
     console.log(req.body);
     const contact = {...req.body}
-   /*  contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, new: true, runValidators: true}, (err,doc)=>{
+
+    contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, runValidators: true}, (err,doc)=>{
         if (err) {
             console.log(err);
             res.send({status:'failed', message: err});
         } else {
             console.log(doc);
+            logs.findByIdAndUpdate(req.logId, {preData: JSON.stringify(doc), postData: JSON.stringify(contact)}, (err) => {});
             res.send(({status:'success', message: 'Contact updated successfully'}));
         }
-    }); */
-
-
-
+    });
+/* 
     const updatedContact = await contacts.findById(contact._id);
     
     //new contacts(contact);
 
     Object.keys(contact).forEach(key => updatedContact[key] = contact[key]);
 
-    /* updatedContact.fullName = contact.fullName;
-    updatedContact.email = contact.email;
-    updatedContact.phone = contact.phone;
-    updatedContact.address = contact.address;
- */
+    //updatedContact.fullName = contact.fullName;
+    // updatedContact.email = contact.email;
+    // updatedContact.phone = contact.phone;
+    // updatedContact.address = contact.address;
+
     updatedContact.save((err,doc)=>{
         if (err) {
             console.log(err);
@@ -104,5 +103,5 @@ exports.updateContact = async (req,res) => {
             console.log(doc);
             res.send(({status:'success', message: 'Contact updated successfully'}));
         }
-    });
+    }); */
 }

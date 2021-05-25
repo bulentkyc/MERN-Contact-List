@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 const contacts = require('./router/contacts');
+const auth = require('./router/auth');
 
 
 const port = process.env.PORT || 8080;
@@ -23,5 +24,6 @@ let allowCrossDomain = function (req, res, next) {
 app.use(allowCrossDomain);
 
 app.use('/contacts', contacts);
+app.use('/auth', auth);
 
 app.listen(port, () => console.log(`Server started to run on ${port}`));
