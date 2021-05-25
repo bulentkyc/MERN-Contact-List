@@ -32,3 +32,22 @@ exports.registerPost = (req, res) => {
     });
 
 }
+
+
+exports.loginPost = (req,res) => {
+    users.findOne(req.body, (err, doc) => {
+        if (err) {
+            console.log(err);
+            res.send({status:'failed', message: err});
+        } else if(doc == null) {
+            res.status(406).send(({status:'failed', message: 'Wrong credentials!'}));
+        } else {
+            //console.log(doc);
+            if (doc.pass == req.body.pass) {
+                res.send(({status:'success', message: 'User logged in successfully'}));
+            } else {
+                res.send({status:'failed', message: `There's an error, please try again later.`});
+            }
+        }
+    })
+}
