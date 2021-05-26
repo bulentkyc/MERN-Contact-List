@@ -6,6 +6,7 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const contacts = require('./router/contacts');
 const auth = require('./router/auth');
+const authMid = require('./middleware/auth')
 
 
 const port = process.env.PORT || 8080;
