@@ -39,9 +39,9 @@ exports.newContact = async (req, res) => {
 exports.getAll = (req,res) => {
     contacts.find({}, (err , docs) => {
         if (err) {
-            res.send(err);
+            res.status(500).send(({status:'failed', message: err}));
         } else {
-            res.send(docs);
+            res.send(({status:'success', message: 'All data fetched successfully', data: docs}));
         }
     });
 }
