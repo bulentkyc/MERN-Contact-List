@@ -24,7 +24,7 @@ let allowCrossDomain = function (req, res, next) {
 
 app.use(allowCrossDomain);
 
-app.use('/contacts', contacts);
+app.use('/contacts', authMid.checkAuth, contacts);
 app.use('/auth', auth);
 
 app.listen(port, () => console.log(`Server started to run on ${port}`));
