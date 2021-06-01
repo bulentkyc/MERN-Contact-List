@@ -27,9 +27,12 @@ exports.newContact = (req, res) => {
         console.log(req.logId);
     
         const {fullName, email, phone, address} = req.body;
-        const avatar = req.file.filename
+       
     
-        const newContact = new contacts({fullName, email, phone, address, avatar});
+        const newContact = new contacts({fullName, email, phone, address});
+        if (req.file) {
+            newContact.avatar = req.file.filename;
+        }
     
         await newContact.save((err, docs) => {
             console.log(err);
@@ -91,8 +94,19 @@ exports.deleteContact = (req,res) => {
 }
 
 exports.updateContact = async (req,res) => {
+    await upload( req, res, async (err) => {
+        if (err) {
+            console.log('err',err);
+        }
+        console.log('multer', req.body, req.file);
+
     console.log(req.body);
-    const contact = {...req.body}
+    const contact = {...req.body }
+    if (req.file) {
+        contact.avatar = req.file.filename;
+    }
+
+    
 
     contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, runValidators: true}, (err,doc)=>{
         if (err) {
@@ -104,6 +118,7 @@ exports.updateContact = async (req,res) => {
             res.send(({status:'success', message: 'Contact updated successfully'}));
         }
     });
+ });
 /* 
     const updatedContact = await contacts.findById(contact._id);
     
