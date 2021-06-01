@@ -7,7 +7,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'avatars')
+        cb(null, 'public/avatars')
     },
     filename: function (req, file, cb) {
         cb(null, 'a' + Date.now() + path.extname(file.originalname))
@@ -16,41 +16,37 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file')
 
-exports.newContact = async (req, res) => {
-
-    //console.log(req);
-    await upload( req, res, (err) => {
+exports.newContact = (req, res) => {
+    upload( req, res, async (err) => {
         if (err) {
             console.log('err',err);
         }
         console.log('multer', req.body, req.file);
-    } );
 
-    ///... multer call goes here
-    console.log('controller', req.body);
-    console.log(req.logId);
-    /* 
+        console.log('controller', req.body);
+        console.log(req.logId);
+    
         const {fullName, email, phone, address} = req.body;
-        const newContact = new contacts({
-            fullName, email, phone, address
+        const avatar = req.file.filename
+    
+        const newContact = new contacts({fullName, email, phone, address, avatar});
+    
+        await newContact.save((err, docs) => {
+            console.log(err);
+            if(err) {
+                res.send(err.errors);
+            } else {
+                console.log(docs)
+                res.send(docs);
+                //const updatedLog = new logs({postData: docs});
+                logs.findByIdAndUpdate(req.logId, {postData: JSON.stringify(docs)}, (err,doc) => console.log({err,doc}));
+            }
         });
-    */
 
-    const newContact = new contacts(req.body);
+    } );
+    
 
-    await newContact.save((err, docs) => {
-        console.log(err);
-        if(err) {
-            res.send(err.errors);
-        } else {
-            console.log(docs)
-            res.send(docs);
-            //const updatedLog = new logs({postData: docs});
-            logs.findByIdAndUpdate(req.logId, {postData: JSON.stringify(docs)}, (err,doc) => console.log({err,doc}));
-        }
-    });
-
-   /*  newContact.save().then((result,err) => {
+    /*  newContact.save().then((result,err) => {
         if (err) {
             res.send({status:'failed', message: err});
         }else {
