@@ -1,6 +1,7 @@
 const logModel = require('../model/logs')
 
 exports.logger = ( req, res, next ) => {
+ 
     const log = new logModel({
         dateTime: Date.now(),
         path: req.originalUrl

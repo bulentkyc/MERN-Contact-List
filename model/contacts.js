@@ -16,7 +16,8 @@ const contacts = new mongoose.Schema({
         minLength: [5, 'my custom error message'],
         maxLength: 15
     },
-    address: String
+    address: String,
+    avatar: String
 });
 
 //first contacts is the collection name, second one is our constant

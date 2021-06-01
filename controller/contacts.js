@@ -1,7 +1,32 @@
 const contacts = require('../model/contacts');
 const logs = require('../model/logs');
+const multer  = require('multer');
+const path = require('path');
+
+///... multer settings goes here
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'avatars')
+    },
+    filename: function (req, file, cb) {
+        cb(null, 'a' + Date.now() + path.extname(file.originalname))
+    }
+});
+
+const upload = multer({ storage: storage }).single('file')
 
 exports.newContact = async (req, res) => {
+
+    //console.log(req);
+    await upload( req, res, (err) => {
+        if (err) {
+            console.log('err',err);
+        }
+        console.log('multer', req.body, req.file);
+    } );
+
+    ///... multer call goes here
     console.log('controller', req.body);
     console.log(req.logId);
     /* 

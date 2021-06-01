@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 
 require('dotenv').config();
 
@@ -8,10 +9,11 @@ const contacts = require('./router/contacts');
 const auth = require('./router/auth');
 const authMid = require('./middleware/auth')
 
-
 const port = process.env.PORT || 8080;
 
 connectDB();
+
+//app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(express.json());
 
