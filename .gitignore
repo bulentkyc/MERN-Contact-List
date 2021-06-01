@@ -1,3 +1,4 @@
 /node_modules
 .env
-/avatars
+/avatars/*
+.DS_Store
