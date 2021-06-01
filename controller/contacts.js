@@ -2,6 +2,7 @@ const contacts = require('../model/contacts');
 const logs = require('../model/logs');
 const multer  = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 ///... multer settings goes here
 
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage }).single('file')
+const upload = multer({ storage: storage }).single('file');
 
 exports.newContact = (req, res) => {
     upload( req, res, async (err) => {
@@ -82,6 +83,15 @@ exports.deleteContact = (req,res) => {
         } else {
             console.log(doc);
             logs.findByIdAndUpdate(req.logId, {preData: JSON.stringify(doc)}, (err,doc) => {});
+
+            try {
+                fs.unlinkSync('public/avatars/' + doc.avatar);
+                console.log('successfully deleted public/avatars/' + doc.avatar);
+            } catch (err) {
+                // handle the error
+            }
+
+
             res.send({
                 status:'success', 
                 message: `${doc.fullName} is deleted from your contact list.`,
@@ -93,32 +103,39 @@ exports.deleteContact = (req,res) => {
     //res.send({status:'test', message: req.params.id});
 }
 
-exports.updateContact = async (req,res) => {
-    await upload( req, res, async (err) => {
+exports.updateContact = (req,res) => {
+    upload( req, res, (err) => {
         if (err) {
             console.log('err',err);
         }
-        console.log('multer', req.body, req.file);
 
-    console.log(req.body);
-    const contact = {...req.body }
-    if (req.file) {
-        contact.avatar = req.file.filename;
-    }
-
-    
-
-    contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, runValidators: true}, (err,doc)=>{
-        if (err) {
-            console.log(err);
-            res.send({status:'failed', message: err});
-        } else {
-            console.log(doc);
-            logs.findByIdAndUpdate(req.logId, {preData: JSON.stringify(doc), postData: JSON.stringify(contact)}, (err) => {});
-            res.send(({status:'success', message: 'Contact updated successfully'}));
+        console.log(req.body);
+        const contact = {...req.body }
+        if (req.file) {
+            contact.avatar = req.file.filename;
         }
+
+        
+
+        contacts.findByIdAndUpdate(contact._id, contact, {upsert: true, runValidators: true}, (err,doc)=>{
+            if (err) {
+                console.log(err);
+                res.send({status:'failed', message: err});
+            } else {
+                if (contact.avatar){
+                    try {
+                        fs.unlinkSync('public/avatars/' + doc.avatar);
+                        console.log('successfully deleted public/avatars/' + doc.avatar);
+                    } catch (err) {
+                        // handle the error
+                    }
+                }
+                console.log(doc);
+                logs.findByIdAndUpdate(req.logId, {preData: JSON.stringify(doc), postData: JSON.stringify(contact)}, (err) => {});
+                res.send(({status:'success', message: 'Contact updated successfully', data: contact}));
+            }
+        });
     });
- });
 /* 
     const updatedContact = await contacts.findById(contact._id);
     
