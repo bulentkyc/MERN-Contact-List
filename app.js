@@ -21,6 +21,7 @@ app.use(express.json());
 
 app.engine('html', hbs.__express);
 app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials')
 
 let allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
