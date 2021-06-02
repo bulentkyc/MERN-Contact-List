@@ -17,7 +17,8 @@ const contacts = new mongoose.Schema({
         maxLength: 15
     },
     address: String,
-    avatar: String
+    avatar: String,
+    userId: String
 });
 
 //first contacts is the collection name, second one is our constant

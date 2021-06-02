@@ -30,7 +30,7 @@ exports.newContact = (req, res) => {
         const {fullName, email, phone, address} = req.body;
        
     
-        const newContact = new contacts({fullName, email, phone, address});
+        const newContact = new contacts({fullName, email, phone, address, userId:req.userId});
         if (req.file) {
             newContact.avatar = req.file.filename;
         }
@@ -62,7 +62,7 @@ exports.newContact = (req, res) => {
 }
 
 exports.getAll = (req,res) => {
-    contacts.find({}, (err , docs) => {
+    contacts.find({userId:req.userId}, (err , docs) => {
         if (err) {
             res.status(500).send(({status:'failed', message: err}));
         } else {
