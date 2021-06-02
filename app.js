@@ -9,7 +9,7 @@ const contacts = require('./router/contacts');
 const auth = require('./router/auth');
 const authMid = require('./middleware/auth');
 const publicView = require('./router/publicViews');
-const hbs = require('hbs')
+const hbs = require('hbs');
 
 const port = process.env.PORT || 8080;
 
@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 app.engine('html', hbs.__express);
-app.set('view engine', 'hbs')
+app.set('view engine', 'hbs');
 
 let allowCrossDomain = function (req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");

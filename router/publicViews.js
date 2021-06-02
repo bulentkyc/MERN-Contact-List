@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const path = require('path');
+const controller = require('../controller/public')
 
-router.get('/about', (req, res) => res.render('about'));
+router.get('/about', controller.about);
 
 module.exports = router;
