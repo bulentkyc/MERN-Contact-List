@@ -10,6 +10,7 @@ const auth = require('./router/auth');
 const authMid = require('./middleware/auth');
 const publicView = require('./router/publicViews');
 const hbs = require('hbs');
+const publicRoutes = require('./router/public');
 
 const port = process.env.PORT || 8080;
 
@@ -35,5 +36,8 @@ app.use(allowCrossDomain);
 app.use('/contacts', authMid.checkAuth, contacts);
 app.use('/auth', auth);
 app.use('/pages', publicView);
+//TO-DO: Manage router part.
+app.use('/', publicRoutes);
+
 
 app.listen(port, () => console.log(`Server started to run on ${port}`));
