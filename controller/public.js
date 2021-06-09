@@ -51,6 +51,19 @@ exports.getContact =  (req, res) => {
             // });
 
             // send mail with defined transport object
+            console.log(req.files);
+            const attachs = () => {
+                if(req.files){
+                    return req.files.map(file => {return {path: file.path}})
+                }else{
+                    return []
+                }
+            }
+
+            //req.files?req.files.map(file => {return {path: file.path}}):[]
+            //this ternary code is same as attachs function.
+            
+
             let info = await transporter.sendMail({
                 from: '"Customer Support" <visitor@mywebsite.com>', // sender address
                 to: "bulent.kayici@icloud.com, nikolas.dimitriadis@hotmail.com", // list of receivers
@@ -58,13 +71,7 @@ exports.getContact =  (req, res) => {
                 text: req.body.message, // plain text body
                 html: `<b>${req.body.message}</b>`, // html body
                 //Attach: attachments/f-1623223770724.png
-                attachments: [
-                    {   // utf-8 string as an attachment
-                        filename: 'test.png',
-                        path: 'attachments/f-1623223770724.png'//req.files[0].path
-                    }
-                ]
-
+                attachments: attachs()
             });
 
             console.log("Message sent: %s", info.messageId);
@@ -78,6 +85,4 @@ exports.getContact =  (req, res) => {
             res.status(401).json({status:'failed', message:err});
         }
     });
-
-    
 }
